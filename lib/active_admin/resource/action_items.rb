@@ -47,27 +47,39 @@ module ActiveAdmin
         !!@action_items && @action_items.any?
       end
 
+      def dynamic_action_methodsf=(&block)
+        @dynamic_action_methods
+      end
+
       private
+
+      def action_methods
+        methods = controller.action_methods
+        if @dynamic_action_methods
+          methods &= @dynamic_action_methods
+        end
+        methods
+      end
 
       # Adds the default action items to each resource
       def add_default_action_items
         # New Link on all actions except :new and :show
         add_action_item :except => [:new, :show] do
-          if controller.action_methods.include?('new')
+          if action_methods.include?('new')
             link_to(I18n.t('active_admin.new_model', :model => active_admin_config.resource_label), new_resource_path)
           end
         end
 
         # Edit link on show
         add_action_item :only => :show do
-          if controller.action_methods.include?('edit')
+          if action_methods.include?('edit')
             link_to(I18n.t('active_admin.edit_model', :model => active_admin_config.resource_label), edit_resource_path(resource))
           end
         end
 
         # Destroy link on show
         add_action_item :only => :show do
-          if controller.action_methods.include?("destroy")
+          if action_methods.include?("destroy")
             link_to(I18n.t('active_admin.delete_model', :model => active_admin_config.resource_label),
               resource_path(resource),
               :method => :delete, :data => {:confirm => I18n.t('active_admin.delete_confirmation')})

@@ -157,7 +157,7 @@ module ActiveAdmin
     #   end
     #
     # Will only create the index and show actions (no create, update or delete)
-    delegate :actions, :to => :controller
+    # delegate :actions, :to => :controller
 
   end
 end

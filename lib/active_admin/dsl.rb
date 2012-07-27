@@ -124,5 +124,10 @@ module ActiveAdmin
     def sidebar(name, options = {}, &block)
       config.sidebar_sections << ActiveAdmin::SidebarSection.new(name, options, &block)
     end
+
+    def actions(*args, &block)
+      config.dynamic_actions = block if block
+      controller.actions(*args)
+    end
   end
 end
